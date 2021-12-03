@@ -12,6 +12,7 @@ public class DuckOnlyBlue extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException
     {
+      /*
         robot.init(hardwareMap,this);
 
         waitForStart();
@@ -21,7 +22,7 @@ public class DuckOnlyBlue extends LinearOpMode {
         robot.spin.setPower(1);
         sleep(4000);
         robot.spin.setPower(0);
-
+*/
     }
 
 

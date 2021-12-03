@@ -17,6 +17,7 @@ public class MiniBotTeleop extends LinearOpMode{
 
 
     private double speedControl = 0.5;
+    private double turnControl = 0.5;
     @Override
 
 
@@ -29,16 +30,16 @@ public class MiniBotTeleop extends LinearOpMode{
         while (opModeIsActive()){
 
             if(gamepad1.right_stick_y!=0||gamepad1.right_stick_x!=0) {
-                robot.motorLeft.setPower(gamepad1.right_stick_y*speedControl);
-                robot.motorRight.setPower(-gamepad1.right_stick_y*speedControl);
-                robot.motorFront.setPower(-gamepad1.right_stick_x*speedControl);
-                robot.motorBack.setPower(gamepad1.right_stick_x*speedControl);
+                robot.motorLeft.setPower((gamepad1.right_stick_y-gamepad1.left_stick_x*0.35)*speedControl);
+                robot.motorRight.setPower((-gamepad1.right_stick_y-gamepad1.left_stick_x*0.35)*speedControl);
+                robot.motorFront.setPower((-gamepad1.right_stick_x-gamepad1.left_stick_x*0.35)*speedControl);
+                robot.motorBack.setPower((gamepad1.right_stick_x-gamepad1.left_stick_x*0.35)*speedControl);
             }
            else if(gamepad1.left_stick_x!=0||gamepad1.left_stick_y!=0){
-                robot.motorLeft.setPower(-gamepad1.left_stick_x*speedControl);
-                robot.motorRight.setPower(-gamepad1.left_stick_x*speedControl);
-                robot.motorFront.setPower(-gamepad1.left_stick_x*speedControl);
-                robot.motorBack.setPower(-gamepad1.left_stick_x*speedControl);
+                robot.motorLeft.setPower(-gamepad1.left_stick_x*turnControl);
+                robot.motorRight.setPower(-gamepad1.left_stick_x*turnControl);
+                robot.motorFront.setPower(-gamepad1.left_stick_x*turnControl);
+                robot.motorBack.setPower(-gamepad1.left_stick_x*turnControl);
             }
            else{
 
@@ -50,9 +51,27 @@ public class MiniBotTeleop extends LinearOpMode{
 
 
            if (gamepad1.dpad_up) speedControl=1.0;
-           if (gamepad1.dpad_left) speedControl=0.5;
+           if (gamepad1.dpad_left) speedControl=0.75;
            if (gamepad1.dpad_right) speedControl=0.5;
            if (gamepad1.dpad_down) speedControl=0.25;
+
+
+            if (gamepad1.dpad_up) turnControl=0.75;
+            if (gamepad1.dpad_left) turnControl=0.5;
+            if (gamepad1.dpad_right) turnControl=0.35;
+            if (gamepad1.dpad_down) turnControl=0.25;
+
+
+           robot.arm.setPower(gamepad2.right_stick_y*0.3);
+
+           if(gamepad2.dpad_up) robot.claw.setPosition(0);
+           if(gamepad2.dpad_down) robot.claw.setPosition(1);
+           if(gamepad2.dpad_right) robot.claw.setPosition(.5);
+           if(gamepad2.dpad_left) robot.claw.setPosition(.3);
+           if(gamepad2.left_trigger!=0&gamepad2.right_trigger>0.25) robot.claw.setPosition(gamepad2.left_trigger);
+
+           robot.spin.setPower(gamepad2.left_stick_y*0.575);
+
 
 
 

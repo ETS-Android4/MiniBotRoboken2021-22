@@ -38,7 +38,6 @@ public class minibot {
     public DcMotor motorBack;
     public DcMotor motorLeft;
     public DcMotor motorRight;
-
     private ElapsedTime     runtime = new ElapsedTime();
 
     BNO055IMU imu;
@@ -56,7 +55,7 @@ public class minibot {
     public Servo claw;
     public DcMotor spin;
    // public ColorSensor sensorColor;
-    public DigitalChannel sensorTouch;
+    //public DigitalChannel sensorTouch;
 
 
     HardwareMap hwMap = null;
@@ -79,7 +78,7 @@ public class minibot {
         spin = hwMap.dcMotor.get("spin");
 
         //sensorColor = hwMap.get(ColorSensor.class,"colorSensor");
-        sensorTouch = hwMap.get(DigitalChannel.class,"touchSensor");
+        //sensorTouch = hwMap.get(DigitalChannel.class,"touchSensor");
 
 
 
@@ -94,6 +93,7 @@ public class minibot {
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         imu = hwMap.get(BNO055IMU.class, "imu");
         imu.initialize(parameters);
+
 
 
     }
@@ -120,9 +120,9 @@ commented out methods need to be updated
         // Send telemetry message to indicate successful Encoder reset
         opmode.telemetry.addData("Path0", "Starting at %7d :%7d",
                 motor:.getCurrentPosition(),
-                frontRight.getCurrentPosition(),
-                rearLeft.getCurrentPosition(),
-                rearRight.getCurrentPosition());
+                motorBack.getCurrentPosition(),
+                motorLeft.getCurrentPosition(),
+                motorRight.getCurrentPosition());
         opmode.telemetry.update();
 
         // Ensure that the opmode is still active
@@ -134,23 +134,23 @@ commented out methods need to be updated
             newRearLeftTarget = -(rearLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
             newRearRightTarget = -(rearRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
 
-            frontLeft.setTargetPosition(newFrontLeftTarget);
-            frontRight.setTargetPosition(newFrontRightTarget);
-            rearLeft.setTargetPosition(newRearLeftTarget);
-            rearRight.setTargetPosition(newRearRightTarget);
+            motorFront.setTargetPosition(newFrontLeftTarget);
+            motorBack.setTargetPosition(newFrontRightTarget);
+            motorLeft.setTargetPosition(newRearLeftTarget);
+            motorRight.setTargetPosition(newRearRightTarget);
 
             // Turn On RUN_TO_POSITION
-            frontLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            frontRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rearLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            rearRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             // reset the timeout time and start motion.
             runtime.reset();
 
-            frontLeft.setPower(Math.abs(speed));
-            frontRight.setPower(Math.abs(speed));
-            rearLeft.setPower(Math.abs(speed));
-            rearRight.setPower(-Math.abs(speed));
+            motorFront.setPower(Math.abs(speed));
+            motorBack.setPower(Math.abs(speed));
+            motorLeft.setPower(Math.abs(speed));
+            motorRight.setPower(-Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -165,19 +165,19 @@ commented out methods need to be updated
                 // Display it for the driver.
                 opmode.telemetry.addData("Path1", "Running to %7d :%7d : %d : %d", newFrontLeftTarget, newFrontRightTarget, newRearLeftTarget, newRearRightTarget);
                 opmode.telemetry.addData("Path2", "Running at %7d :%7d : %7d : %7d",
-                        frontLeft.getCurrentPosition(),
-                        frontRight.getCurrentPosition(),
-                        rearLeft.getCurrentPosition(),
-                        rearRight.getCurrentPosition());
+                        motorFront.getCurrentPosition(),
+                        motorBack.getCurrentPosition(),
+                        motorLeft.getCurrentPosition(),
+                        motorRight.getCurrentPosition());
                 opmode.telemetry.update();
 
             }
 
             // Stop all motion;
-            frontLeft.setPower(0);
-            frontRight.setPower(0);
-            rearLeft.setPower(0);
-            rearRight.setPower(0);
+            motorFront.setPower(0);
+            motorBack.setPower(0);
+            motorLeft.setPower(0);
+            motorRight.setPower(0);
 
             initRunWithoutEncoder();
             // Turn off RUN_TO_POSITION
@@ -187,10 +187,10 @@ commented out methods need to be updated
 
         public void initRunWithEncoder()
         {
-            frontLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rearLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            rearRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorFront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorBack.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
             frontLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -222,8 +222,6 @@ commented out methods need to be updated
     public void driveForwardTime(double speed,long time) throws InterruptedException {
         frontLeft.setPower(speed);
         frontRight.setPower(speed);
-        rearLeft.setPower(speed);
-        rearRight.setPower(speed);
         Thread.sleep(time);
         stopDriving();
     }
@@ -239,6 +237,25 @@ commented out methods need to be updated
         motorFront.setPower(speed);
         motorBack.setPower(speed);
     }
+
+
+/*
+    public void driveUntilTouch(double speed, LinearOpMode opmode) throws InterruptedException
+    {
+        driveForward(speed);
+        while (sensorTouch.getState()==true&&!opmode.isStopRequested())
+        {
+            if (sensorTouch.getState() == true) {
+                opmode.telemetry.addData("Digital Touch", "Is Not Pressed");
+            } else {
+                opmode.telemetry.addData("Digital Touch", "Is Pressed");
+            }
+            opmode.telemetry.update();
+        }
+        stopDriving();
+    }
+
+*/
 
 
 /*

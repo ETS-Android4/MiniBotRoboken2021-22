@@ -18,9 +18,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
             waitForStart();
 
-            robot.motorFront.setPower(0.3);
-            robot.motorBack.setPower(-0.3);
-            sleep(2000);
+            robot.motorFront.setPower(0.35);
+            robot.motorBack.setPower(-0.35);
+            sleep(3000);
             robot.motorBack.setPower(0);
             robot.motorFront.setPower(0);
 

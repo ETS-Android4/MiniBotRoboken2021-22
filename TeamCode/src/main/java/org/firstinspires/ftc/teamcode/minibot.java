@@ -54,6 +54,7 @@ public class minibot {
     public DcMotor arm;
     public Servo claw;
     public DcMotor spin;
+    public DcMotor armspin;
    // public ColorSensor sensorColor;
     //public DigitalChannel sensorTouch;
 
@@ -76,6 +77,7 @@ public class minibot {
         arm = hwMap.dcMotor.get("arm");
         claw = hwMap.servo.get("claw");
         spin = hwMap.dcMotor.get("spin");
+        armspin = hwMap.dcMotor.get("armspin");
 
         //sensorColor = hwMap.get(ColorSensor.class,"colorSensor");
         //sensorTouch = hwMap.get(DigitalChannel.class,"touchSensor");
@@ -89,6 +91,7 @@ public class minibot {
         motorLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         arm.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        armspin.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
         parameters.angleUnit           = BNO055IMU.AngleUnit.DEGREES;
         imu = hwMap.get(BNO055IMU.class, "imu");

@@ -27,21 +27,19 @@ public class MiniBotTeleop extends LinearOpMode{
 
         waitForStart();
 
-        while (opModeIsActive()){
+        while (opModeIsActive()) {
 
-            if(gamepad1.right_stick_y!=0||gamepad1.right_stick_x!=0) {
-                robot.motorLeft.setPower((gamepad1.right_stick_y-gamepad1.left_stick_x*0.35)*speedControl);
-                robot.motorRight.setPower((-gamepad1.right_stick_y-gamepad1.left_stick_x*0.35)*speedControl);
-                robot.motorFront.setPower((-gamepad1.right_stick_x-gamepad1.left_stick_x*0.35)*speedControl);
-                robot.motorBack.setPower((gamepad1.right_stick_x-gamepad1.left_stick_x*0.35)*speedControl);
-            }
-           else if(gamepad1.left_stick_x!=0||gamepad1.left_stick_y!=0){
-                robot.motorLeft.setPower(-gamepad1.left_stick_x*turnControl);
-                robot.motorRight.setPower(-gamepad1.left_stick_x*turnControl);
-                robot.motorFront.setPower(-gamepad1.left_stick_x*turnControl);
-                robot.motorBack.setPower(-gamepad1.left_stick_x*turnControl);
-            }
-           else{
+            if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
+                robot.motorLeft.setPower((gamepad1.right_stick_y - gamepad1.left_stick_x * 0.35) * speedControl);
+                robot.motorRight.setPower((-gamepad1.right_stick_y - gamepad1.left_stick_x * 0.35) * speedControl);
+                robot.motorFront.setPower((-gamepad1.right_stick_x - gamepad1.left_stick_x * 0.35) * speedControl);
+                robot.motorBack.setPower((gamepad1.right_stick_x - gamepad1.left_stick_x * 0.35) * speedControl);
+            } else if (gamepad1.left_stick_x != 0 || gamepad1.left_stick_y != 0) {
+                robot.motorLeft.setPower(-gamepad1.left_stick_x * turnControl);
+                robot.motorRight.setPower(-gamepad1.left_stick_x * turnControl);
+                robot.motorFront.setPower(-gamepad1.left_stick_x * turnControl);
+                robot.motorBack.setPower(-gamepad1.left_stick_x * turnControl);
+            } else {
 
                 robot.motorLeft.setPower(0);
                 robot.motorRight.setPower(0);
@@ -50,30 +48,29 @@ public class MiniBotTeleop extends LinearOpMode{
             }
 
 
-           if (gamepad1.dpad_up) speedControl=1.0;
-           if (gamepad1.dpad_left) speedControl=0.75;
-           if (gamepad1.dpad_right) speedControl=0.5;
-           if (gamepad1.dpad_down) speedControl=0.25;
+            if (gamepad1.dpad_up) speedControl = 1.0;
+            if (gamepad1.dpad_left) speedControl = 0.75;
+            if (gamepad1.dpad_right) speedControl = 0.5;
+            if (gamepad1.dpad_down) speedControl = 0.25;
 
 
-            if (gamepad1.dpad_up) turnControl=0.75;
-            if (gamepad1.dpad_left) turnControl=0.5;
-            if (gamepad1.dpad_right) turnControl=0.35;
-            if (gamepad1.dpad_down) turnControl=0.25;
+            if (gamepad1.dpad_up) turnControl = 0.75;
+            if (gamepad1.dpad_left) turnControl = 0.5;
+            if (gamepad1.dpad_right) turnControl = 0.35;
+            if (gamepad1.dpad_down) turnControl = 0.25;
 
 
-           robot.arm.setPower(gamepad2.right_stick_y*0.3);
+            robot.arm.setPower(gamepad2.right_stick_y * 0.3);
 
-           if(gamepad2.dpad_up) robot.claw.setPosition(0);
-           if(gamepad2.dpad_down) robot.claw.setPosition(1);
-           if(gamepad2.dpad_right) robot.claw.setPosition(.5);
-           if(gamepad2.dpad_left) robot.claw.setPosition(.3);
-           if(gamepad2.left_trigger!=0&gamepad2.right_trigger>0.25) robot.claw.setPosition(gamepad2.left_trigger);
+            if (gamepad2.dpad_up) robot.claw.setPosition(0);
+            if (gamepad2.dpad_down) robot.claw.setPosition(1);
+            if (gamepad2.dpad_right) robot.claw.setPosition(.5);
+            if (gamepad2.dpad_left) robot.claw.setPosition(.3);
+            //gamepad2.left_trigger!=0&gamepad2.right_trigger>0.25) robot.claw.setPosition(gamepad2.left_trigger);
 
-           robot.spin.setPower(gamepad2.left_stick_y*0.575);
+            robot.spin.setPower(gamepad2.left_stick_y * 0.575);
 
+            robot.armspin.setPower(gamepad2.right_trigger*gamepad2.right_trigger*0.3);
+            robot.armspin.setPower(-gamepad2.left_trigger*gamepad2.left_trigger*0.2);
 
-
-
-
-    }}}
+        }}}

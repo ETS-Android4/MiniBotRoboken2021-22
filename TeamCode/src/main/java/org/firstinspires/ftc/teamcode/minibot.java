@@ -107,14 +107,14 @@ public class minibot {
 /*
 commented out methods need to be updated
  */
-    /*
-    public void encoderDrive(double speed,
-                             double leftInches, double rightInches,
+
+   /* public void encoderDrive(double speed,
+                             double sideInches, double forwardInches,
                              double timeoutS, LinearOpMode opmode) throws InterruptedException {
-        int newFrontLeftTarget;
-        int newFrontRightTarget;
-        int newRearLeftTarget;
-        int newRearRightTarget;
+        int newFrontTarget;
+        int newLeftTarget;
+        int newBackTarget;
+        int newRightTarget;
 
         // Send telemetry message to signify robot waiting;
         opmode.telemetry.addData("Status", "Resetting Encoders");    //
@@ -124,25 +124,30 @@ commented out methods need to be updated
 
         // Send telemetry message to indicate successful Encoder reset
         opmode.telemetry.addData("Path0", "Starting at %7d :%7d",
-                motor:.getCurrentPosition(),
+                motorFront.getCurrentPosition(),
                 motorBack.getCurrentPosition(),
                 motorLeft.getCurrentPosition(),
                 motorRight.getCurrentPosition());
         opmode.telemetry.update();
 
+
         // Ensure that the opmode is still active
         if (opmode.opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newFrontLeftTarget = (frontLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
-            newFrontRightTarget = (frontRight.getCurrentPosition() - (int) (rightInches * COUNTS_PER_INCH));
-            newRearLeftTarget = -(rearLeft.getCurrentPosition() + (int) (leftInches * COUNTS_PER_INCH));
-            newRearRightTarget = -(rearRight.getCurrentPosition() + (int) (rightInches * COUNTS_PER_INCH));
+            newFrontTarget = (motorFront.getCurrentPosition() + (int) (sideInches * COUNTS_PER_INCH));
+            newLeftTarget = (motorLeft.getCurrentPosition() + (int) (forwardInches * COUNTS_PER_INCH));
+            newBackTarget = -(motorBack.getCurrentPosition() + (int) (sideInches * COUNTS_PER_INCH));
+            newRightTarget = -(motorRight.getCurrentPosition() + (int) (forwardInches * COUNTS_PER_INCH));
 
-            motorFront.setTargetPosition(newFrontLeftTarget);
-            motorBack.setTargetPosition(newFrontRightTarget);
-            motorLeft.setTargetPosition(newRearLeftTarget);
-            motorRight.setTargetPosition(newRearRightTarget);
+            motorFront.setTargetPosition(newFrontTarget);
+            motorBack.setTargetPosition(newBackTarget);
+            motorLeft.setTargetPosition(newLeftTarget);
+            motorRight.setTargetPosition(newRightTarget);
+
+            opmode.telemetry.addData("Path1", "Running to %7d :%7d : %d : %d", newFrontTarget, newLeftTarget, newBackTarget, newRightTarget);
+            opmode.telemetry.update();
+            opmode.sleep(2000);
 
             // Turn On RUN_TO_POSITION
             motorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -155,7 +160,7 @@ commented out methods need to be updated
             motorFront.setPower(Math.abs(speed));
             motorBack.setPower(Math.abs(speed));
             motorLeft.setPower(Math.abs(speed));
-            motorRight.setPower(-Math.abs(speed));
+            motorRight.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -165,10 +170,10 @@ commented out methods need to be updated
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opmode.opModeIsActive() &&
                     (runtime.seconds() < timeoutS) &&
-                    (frontLeft.isBusy() && frontRight.isBusy() && rearLeft.isBusy() && rearRight.isBusy())) {
+                    (motorFront.isBusy() && motorLeft.isBusy() && motorBack.isBusy() && motorRight.isBusy())) {
 
                 // Display it for the driver.
-                opmode.telemetry.addData("Path1", "Running to %7d :%7d : %d : %d", newFrontLeftTarget, newFrontRightTarget, newRearLeftTarget, newRearRightTarget);
+                opmode.telemetry.addData("Path1", "Running to %7d :%7d : %d : %d", newFrontTarget, newLeftTarget, newBackTarget, newRightTarget);
                 opmode.telemetry.addData("Path2", "Running at %7d :%7d : %7d : %7d",
                         motorFront.getCurrentPosition(),
                         motorBack.getCurrentPosition(),
@@ -188,7 +193,142 @@ commented out methods need to be updated
             // Turn off RUN_TO_POSITION
 
         }
+    }*/
+
+   public void encoderSideDrive(double speed,
+                            double sideInches,
+                            double timeoutS, LinearOpMode opmode) throws InterruptedException {
+       int newFrontTarget;
+       int newBackTarget;
+
+       // Send telemetry message to signify robot waiting;
+       opmode.telemetry.addData("Status", "Resetting Encoders");    //
+       opmode.telemetry.update();
+
+       initRunWithEncoder();
+
+       // Send telemetry message to indicate successful Encoder reset
+       opmode.telemetry.addData("Path0", "Starting at %7d :%7d",
+               motorFront.getCurrentPosition(),
+               motorBack.getCurrentPosition(),
+       opmode.telemetry.update());
+
+
+       // Ensure that the opmode is still active
+       if (opmode.opModeIsActive()) {
+
+           // Determine new target position, and pass to motor controller
+           newFrontTarget = (motorFront.getCurrentPosition() + (int) (sideInches * COUNTS_PER_INCH));
+           newBackTarget = -(motorBack.getCurrentPosition() + (int) (sideInches * COUNTS_PER_INCH));
+
+           motorFront.setTargetPosition(newFrontTarget);
+           motorBack.setTargetPosition(newBackTarget);
+
+
+           // Turn On RUN_TO_POSITION
+           motorFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           motorBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+           // reset the timeout time and start motion.
+           runtime.reset();
+
+           motorFront.setPower(Math.abs(speed));
+           motorBack.setPower(-Math.abs(speed));
+
+           // keep looping while we are still active, and there is time left, and both motors are running.
+           // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+           // its target position, the motion will stop.  This is "safer" in the event that the robot will
+           // always end the motion as soon as possible.
+           // However, if you require that BOTH motors have finished their moves before the robot continues
+           // onto the next step, use (isBusy() || isBusy()) in the loop test.
+           while (opmode.opModeIsActive() &&
+                   (runtime.seconds() < timeoutS) &&
+                   (motorFront.isBusy() && motorBack.isBusy() )) {
+
+               // Display it for the driver.
+               opmode.telemetry.addData("Path1", "Running to %7d :%7d ", newFrontTarget, newBackTarget);
+               opmode.telemetry.addData("Path2", "Running at %7d :%7d ",
+                       motorFront.getCurrentPosition(),
+                       motorBack.getCurrentPosition(),
+               opmode.telemetry.update());
+
+           }
+
+           // Stop all motion;
+           motorFront.setPower(0);
+           motorBack.setPower(0);
+           initRunWithoutEncoder();
+           // Turn off RUN_TO_POSITION
+
+       }
+   }
+
+    public void encoderForwardDrive(double speed,
+                                 double forwardInches,
+                                 double timeoutS, LinearOpMode opmode) throws InterruptedException {
+        int newLeftTarget;
+        int newRightTarget;
+
+        // Send telemetry message to signify robot waiting;
+        opmode.telemetry.addData("Status", "Resetting Encoders");    //
+        opmode.telemetry.update();
+
+        initRunWithEncoder();
+
+        // Send telemetry message to indicate successful Encoder reset
+        opmode.telemetry.addData("Path0", "Starting at %7d :%7d",
+                motorLeft.getCurrentPosition(),
+                motorRight.getCurrentPosition(),
+                opmode.telemetry.update());
+
+
+        // Ensure that the opmode is still active
+        if (opmode.opModeIsActive()) {
+
+            // Determine new target position, and pass to motor controller
+            newLeftTarget = (motorLeft.getCurrentPosition() + (int) (forwardInches * COUNTS_PER_INCH));
+            newRightTarget = (motorRight.getCurrentPosition() + (int) (forwardInches * COUNTS_PER_INCH));
+
+            motorLeft.setTargetPosition(newLeftTarget);
+            motorRight.setTargetPosition(newRightTarget);
+
+
+            // Turn On RUN_TO_POSITION
+            motorLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            // reset the timeout time and start motion.
+            runtime.reset();
+
+            motorLeft.setPower(Math.abs(speed));
+            motorRight.setPower(Math.abs(speed));
+
+            // keep looping while we are still active, and there is time left, and both motors are running.
+            // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
+            // its target position, the motion will stop.  This is "safer" in the event that the robot will
+            // always end the motion as soon as possible.
+            // However, if you require that BOTH motors have finished their moves before the robot continues
+            // onto the next step, use (isBusy() || isBusy()) in the loop test.
+            while (opmode.opModeIsActive() &&
+                    (runtime.seconds() < timeoutS) &&
+                    (motorLeft.isBusy() && motorRight.isBusy() )) {
+
+                // Display it for the driver.
+                opmode.telemetry.addData("Path1", "Running to %7d :%7d ", newLeftTarget, newRightTarget);
+                opmode.telemetry.addData("Path2", "Running at %7d :%7d ",
+                        motorLeft.getCurrentPosition(),
+                        motorRight.getCurrentPosition(),
+                        opmode.telemetry.update());
+
+            }
+
+            // Stop all motion;
+            motorLeft.setPower(0);
+            motorRight.setPower(0);
+            initRunWithoutEncoder();
+            // Turn off RUN_TO_POSITION
+
+        }
     }
+
 
         public void initRunWithEncoder()
         {
@@ -198,40 +338,40 @@ commented out methods need to be updated
             motorRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            rearRight.setDirection(DcMotor.Direction.REVERSE);
-            rearLeft.setDirection(DcMotor.Direction.FORWARD);
+            motorFront.setDirection(DcMotor.Direction.REVERSE);
+            motorLeft.setDirection(DcMotor.Direction.REVERSE);
+            motorBack.setDirection(DcMotor.Direction.REVERSE);
+            motorRight.setDirection(DcMotor.Direction.FORWARD);
 
-            frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rearLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            rearRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            rearLeft.setDirection(DcMotor.Direction.FORWARD);
+            motorFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeft.setDirection(DcMotor.Direction.REVERSE);
+            motorRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
         public void initRunWithoutEncoder ()
         {
-            frontLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            frontRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rearLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rearRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorFront.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorBack.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            motorRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            frontLeft.setDirection(DcMotor.Direction.REVERSE);
-            frontRight.setDirection(DcMotor.Direction.REVERSE);
-            rearRight.setDirection(DcMotor.Direction.FORWARD);
-            rearLeft.setDirection(DcMotor.Direction.FORWARD);
+            motorFront.setDirection(DcMotor.Direction.REVERSE);
+            motorLeft.setDirection(DcMotor.Direction.REVERSE);
+            motorBack.setDirection(DcMotor.Direction.FORWARD);
+            motorRight.setDirection(DcMotor.Direction.FORWARD);
         }
 
     public void driveForwardTime(double speed,long time) throws InterruptedException {
-        frontLeft.setPower(speed);
-        frontRight.setPower(speed);
+        motorLeft.setPower(speed);
+        motorRight.setPower(speed);
         Thread.sleep(time);
         stopDriving();
     }
 
-*/
+
 
     public void driveForward(double speed)  {
         motorLeft.setPower(speed);

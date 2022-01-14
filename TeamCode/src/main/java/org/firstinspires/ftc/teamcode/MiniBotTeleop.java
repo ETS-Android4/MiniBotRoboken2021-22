@@ -67,8 +67,10 @@ public class MiniBotTeleop extends LinearOpMode{
             //This is for the claw btw
             //gamepad2.left_trigger!=0&gamepad2.right_trigger>0.25) robot.claw.setPosition(gamepad2.left_trigger);
 
-            robot.spin.setPower(gamepad2.left_stick_x * 0.575);
-            robot.spin.setPower(-gamepad2.left_stick_x * 0.575);
+            //robot.spin.setPower(gamepad2.left_stick_x * 0.575);
+            //robot.spin.setPower(-gamepad2.left_stick_x * 0.575);
+            robot.spin.setPower(gamepad2.right_trigger*0.575);
+            robot.spin.setPower(-gamepad2.left_trigger*0.575);
 
 
             if (gamepad2.right_stick_y<0) robot.arm.setPower(gamepad2.right_stick_y * 0.2);
@@ -77,8 +79,9 @@ public class MiniBotTeleop extends LinearOpMode{
             else robot.arm.setPower(0);
 
 
-            robot.armspin.setPower(gamepad2.right_trigger*gamepad2.right_trigger*0.4);
-            robot.armspin.setPower(-gamepad2.left_trigger*gamepad2.left_trigger*0.3);
+            //robot.armspin.setPower(gamepad2.right_trigger*gamepad2.right_trigger*0.4);
+            //robot.armspin.setPower(-gamepad2.left_trigger*gamepad2.left_trigger*0.3);
+            robot.armspin.setPower(gamepad2.right_stick_x*0.3);
 
             /*if(gamepad2.x) robot.swipe.setPosition(1);
             if(gamepad2.y) robot.swipe.setPosition(0);

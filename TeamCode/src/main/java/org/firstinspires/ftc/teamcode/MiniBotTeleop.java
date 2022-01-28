@@ -24,6 +24,7 @@ public class MiniBotTeleop extends LinearOpMode{
     public void runOpMode()
     {
         robot.init(hardwareMap,this);
+        robot.claw.setPosition(0.8);
 
         waitForStart();
 
@@ -81,7 +82,7 @@ public class MiniBotTeleop extends LinearOpMode{
 
             //robot.armspin.setPower(gamepad2.right_trigger*gamepad2.right_trigger*0.4);
             //robot.armspin.setPower(-gamepad2.left_trigger*gamepad2.left_trigger*0.3);
-            robot.armspin.setPower(gamepad2.right_stick_x*0.2);
+            robot.armspin.setPower(gamepad2.left_stick_y*-0.7);
 
             /*if(gamepad2.x) robot.swipe.setPosition(1);
             if(gamepad2.y) robot.swipe.setPosition(0);

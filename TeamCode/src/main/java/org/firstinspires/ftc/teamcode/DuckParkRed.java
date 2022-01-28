@@ -18,7 +18,7 @@ public class DuckParkRed extends LinearOpMode {
 
         robot.encoderSideDrive(0.3,3,7,this);
         sleep(500);
-        robot.encoderForwardDrive(0.3,4,4,this);
+        robot.encoderForwardDrive(0.3,6,4,this);
         sleep(250);
         robot.spin.setPower(-0.575);
         sleep(3000);

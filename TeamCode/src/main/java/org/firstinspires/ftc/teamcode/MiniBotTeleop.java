@@ -89,7 +89,7 @@ public class MiniBotTeleop extends LinearOpMode{
             if(gamepad2.a) robot.swipe.setPosition(0.5);*/
             //robot.swipe.setPosition(gamepad2.left_stick_y*0.5+0.5);
 
-            if (gamepad1.a) robot.motorFront.setPower(1);
+            /*if (gamepad1.a) robot.motorFront.setPower(1);
             if (gamepad1.b) {
                 robot.motorBack.setPower(1);
                 robot.motorFront.setPower(0);
@@ -101,5 +101,10 @@ public class MiniBotTeleop extends LinearOpMode{
             if(gamepad1.y) {
                 robot.motorLeft.setPower(1);
                 robot.motorRight.setPower(0);
-            }
+            }*/
+            if (gamepad2.a) robot.blockspin.setPower(1);
+            if (gamepad2.x) robot.blockspin.setPower(0);
+            if (gamepad2.y) robot.blockspin.setPower(-1);
+
+
         }}}

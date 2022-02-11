@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+
 @TeleOp(name="MiniTeleop")
 
 public class MiniBotTeleop extends LinearOpMode{
@@ -24,11 +27,22 @@ public class MiniBotTeleop extends LinearOpMode{
     public void runOpMode()
     {
         robot.init(hardwareMap,this);
-        robot.claw.setPosition(0.8);
+        //robot.claw.setPosition(0.4);
 
         waitForStart();
 
         while (opModeIsActive()) {
+
+
+
+            telemetry.addData("deviceName", robot.distanceSensor.getDeviceName());
+           telemetry.addData("range", String.format("%.01f mm", robot.distanceSensor.getDistance(DistanceUnit.MM)));
+            telemetry.addData("range", String.format("%.01f cm", robot.distanceSensor.getDistance(DistanceUnit.CM)));
+            telemetry.addData("range", String.format("%.01f m", robot.distanceSensor.getDistance(DistanceUnit.METER)));
+            telemetry.addData("range", String.format("%.01f in", robot.distanceSensor.getDistance(DistanceUnit.INCH)));
+
+            telemetry.update();
+
 
             if (gamepad1.right_stick_y != 0 || gamepad1.right_stick_x != 0) {
                 robot.motorLeft.setPower((gamepad1.right_stick_y - gamepad1.left_stick_x * 0.35) * speedControl);

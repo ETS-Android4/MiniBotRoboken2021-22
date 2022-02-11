@@ -57,6 +57,7 @@ public class minibot {
     public DcMotor armspin;
     public Servo swipe;
     public CRServo blockspin;
+    public DistanceSensor distanceSensor;
    // public ColorSensor sensorColor;
     //public DigitalChannel sensorTouch;
 
@@ -82,6 +83,7 @@ public class minibot {
         armspin = hwMap.dcMotor.get("armspin");
         swipe = hwMap.servo.get("swipe");
         blockspin = hwMap.crservo.get("blockspin");
+        distanceSensor = hwMap.get(DistanceSensor.class, "distanceSensor");
 
         //sensorColor = hwMap.get(ColorSensor.class,"colorSensor");
         //sensorTouch = hwMap.get(DigitalChannel.class,"touchSensor");

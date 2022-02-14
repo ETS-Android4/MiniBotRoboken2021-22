@@ -60,7 +60,7 @@ public class BlueDuckSIDE extends LinearOpMode {
                     robot.claw.setPosition(0);
                     sleep(300);
 
-                    robot.encoderForwardDrive(0.25, -21, 5, this);
+                    robot.encoderForwardDrive(0.25, -21, 6, this);
                     sleep(300);
                     robot.arm.setPower(-0.4);
                     sleep(500);

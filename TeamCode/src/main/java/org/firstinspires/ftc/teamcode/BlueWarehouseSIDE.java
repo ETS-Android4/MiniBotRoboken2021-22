@@ -19,11 +19,12 @@ public class BlueWarehouseSIDE extends LinearOpMode{
         robot.claw.setPosition(0.8);
         waitForStart();
 
-        robot.arm.setPower(-0.5);
-        sleep(1000);
+        robot.arm.setPower(-0.3);
+        sleep(2000);
         robot.arm.setPower(0);
 
         robot.encoderForwardDrive(0.25, 21, 5, this);
+        sleep(1000);
 
         if(robot.distanceSensor.getDistance(DistanceUnit.CM) < 10) {
 
@@ -47,15 +48,17 @@ public class BlueWarehouseSIDE extends LinearOpMode{
             robot.encoderSideDrive(0.25, -60, 7, this);
         }
         else {
-            robot.encoderSideDrive(0.25,-5.7,5,this);
+            robot.encoderSideDrive(0.25,-6,5,this);
             robot.motorLeft.setPower(-0.3); robot.motorRight.setPower(0.3);
             sleep(750);
             robot.motorLeft.setPower(0);
             robot.motorRight.setPower(0);
-            sleep(300);
+            robot.encoderForwardDrive(0.25,1,2,this);
+            sleep(1000);
 
             if(robot.distanceSensor.getDistance(DistanceUnit.CM) < 10) {
                 sleep(300);
+
 
                 robot.motorLeft.setPower(0.3); robot.motorRight.setPower(-0.3);
                 sleep(750);
@@ -63,7 +66,7 @@ public class BlueWarehouseSIDE extends LinearOpMode{
                 robot.motorRight.setPower(0);
                 sleep(300);
 
-                robot.encoderSideDrive(0.25, 25, 5, this);
+                robot.encoderSideDrive(0.25, 22, 5, this);
 
                 robot.encoderForwardDrive(0.25,-4.2,3,this);
 
@@ -81,8 +84,13 @@ public class BlueWarehouseSIDE extends LinearOpMode{
                 sleep(500);
                 robot.arm.setPower(0);
                 sleep(300);
-                robot.encoderSideDrive(0.25, -60, 7, this);
+                robot.encoderSideDrive(0.25, -20, 7, this);
+                sleep(100);
+                robot.encoderForwardDrive(0.25,-3,3,this);
+                sleep(200);
+                robot.encoderSideDrive(0.25,-40,7,this);
             }
+
             else {
 
                 sleep(300);
@@ -101,7 +109,7 @@ public class BlueWarehouseSIDE extends LinearOpMode{
                 sleep(1025);
                 robot.arm.setPower(-0.1);
                 sleep(300);
-                robot.encoderForwardDrive(0.25,4.5,2,this);
+                robot.encoderForwardDrive(0.25,5.5,2,this);
                 robot.claw.setPosition(0);
                 sleep(300);
 
@@ -111,7 +119,12 @@ public class BlueWarehouseSIDE extends LinearOpMode{
                 sleep(500);
                 robot.arm.setPower(0);
                 sleep(300);
-                robot.encoderSideDrive(0.25, -60, 7, this);
+                robot.encoderSideDrive(0.25, -20, 7, this);
+            sleep(100);
+            robot.encoderForwardDrive(0.25,-3,3,this);
+            sleep(200);
+            robot.encoderSideDrive(0.25,-40,7,this);
+
             }
 
         }
